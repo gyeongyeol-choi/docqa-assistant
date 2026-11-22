@@ -8,9 +8,10 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
+from docqa.config import resolve_resource_path
 from docqa.service import DocQAService
 
-STATIC_INDEX = Path(__file__).parent / "static" / "index.html"
+STATIC_INDEX = resolve_resource_path("docqa/static/index.html")
 
 
 class AskRequest(BaseModel):

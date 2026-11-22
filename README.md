@@ -58,9 +58,21 @@ python -m docqa.cli ask "하이브리드 검색기는 어떻게 동작하나요?
 
 # 웹 서버 실행 (http://127.0.0.1:8000)
 python -m docqa.cli serve
+
+# 데스크톱 앱 창으로 실행 (CLI/브라우저 별도 실행 불필요)
+python -m docqa.desktop
 ```
 
-### 4. 테스트 및 검색 평가
+### 4. 데스크톱 앱(`.exe`) 실행 및 빌드 (선택)
+
+`pip install -e .`로 패키지를 설치하면 터미널 없이 `docqa-app` 명령으로 바로 실행할 수 있으며, `PyInstaller`로 단일 실행 파일(`.exe`)을 만들 수도 있습니다.
+
+```powershell
+pip install pyinstaller
+pyinstaller --noconsole --onefile --name DocQA-Assistant --add-data "docqa/static;docqa/static" --add-data "sample_docs;sample_docs" docqa/desktop.py
+```
+
+### 5. 테스트 및 검색 평가
 
 ```bash
 python -m unittest discover -s tests

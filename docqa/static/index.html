@@ -60,6 +60,7 @@
     <div class="card">
       <div class="row">
         <input id="docsDirInput" type="text" placeholder="인덱싱할 문서 폴더 경로 (비워두면 기본값 ./sample_docs)" />
+        <button id="pickFolderBtn" class="secondary" style="display: none;" onclick="pickFolder()">폴더 선택</button>
         <button class="secondary" onclick="reindex()">문서 인덱싱</button>
       </div>
       <div id="docsList" class="muted" style="margin-top: 0.75rem;"></div>
@@ -116,10 +117,37 @@
       data.citations.forEach(c => {
         const div = document.createElement('div');
         div.className = 'citation';
-        div.innerHTML = `<strong>[${c.index}] ${c.source} › ${c.section}</strong> (score: ${c.score})<div class="muted">${c.excerpt}</div>`;
+
+        const header = document.createElement('strong');
+        header.textContent = `[${c.index}] ${c.source} › ${c.section}`;
+        div.appendChild(header);
+        div.appendChild(document.createTextNode(` (score: ${c.score})`));
+
+        const excerpt = document.createElement('div');
+        excerpt.className = 'muted';
+        excerpt.textContent = c.excerpt;
+        div.appendChild(excerpt);
+
         box.appendChild(div);
       });
     }
+
+    async function pickFolder() {
+      if (!window.pywebview?.api?.pick_folder) return;
+      const folder = await window.pywebview.api.pick_folder();
+      if (folder) {
+        document.getElementById('docsDirInput').value = folder;
+      }
+    }
+
+    function enableDesktopFeatures() {
+      if (window.pywebview?.api?.pick_folder) {
+        document.getElementById('pickFolderBtn').style.display = 'inline-block';
+      }
+    }
+
+    window.addEventListener('pywebviewready', enableDesktopFeatures);
+    if (window.pywebview) enableDesktopFeatures();
 
     document.getElementById('questionInput').addEventListener('keydown', e => {
       if (e.key === 'Enter') ask();

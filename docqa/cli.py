@@ -30,6 +30,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_serve = sub.add_parser("serve", help="Start the FastAPI web server")
     p_serve.add_argument("--host", default="127.0.0.1")
     p_serve.add_argument("--port", type=int, default=8000)
+
+    sub.add_parser("app", help="Launch DocQA Assistant as a desktop GUI app")
     return parser
 
 
@@ -74,6 +76,11 @@ def main(argv: list[str] | None = None) -> int:
 
         uvicorn.run("docqa.api:app", host=args.host, port=args.port, reload=False)
         return 0
+
+    if args.command == "app":
+        from docqa.desktop import main as desktop_main
+
+        return desktop_main()
 
     return 1
 
