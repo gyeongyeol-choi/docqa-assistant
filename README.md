@@ -96,3 +96,8 @@ docqa-assistant/
 ├── pyproject.toml
 └── requirements.txt
 ```
+
+## 라이선스
+
+이 프로젝트는 [MIT License](LICENSE)를 따릅니다.
+

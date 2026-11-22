@@ -7,6 +7,7 @@ name = "docqa-assistant"
 version = "0.1.0"
 description = "Personal & technical document Q&A assistant with hybrid retrieval (BM25 + Vector RRF) and source citations."
 readme = "README.md"
+license = { text = "MIT" }
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.115.0",
