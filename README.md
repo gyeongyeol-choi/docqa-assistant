@@ -8,7 +8,7 @@
 - **하이브리드 검색(BM25 + Dense Vector RRF)**:
   - 한국어/영어 바이그램(2-gram)을 지원하는 순수 Python BM25 검색으로 API 키 없이도 동작합니다.
   - Gemini / OpenAI 임베딩 활성화 시 Reciprocal Rank Fusion(RRF)으로 어휘 검색과 의미 검색을 결합합니다.
-- **멀티 LLM & 오프라인 모드**: `gemini`, `openai`, `offline`(API 키 없는 추출 요약 모드) 전환을 지원합니다.
+- **멀티 LLM & 오프라인 모드**: `gemini`, `openai`, `claude`, `offline`(API 키 없는 추출 요약 모드) 전환을 지원합니다.
 - **CLI & FastAPI 웹 UI**: 터미널 CLI와 웹 대시보드(`/`)를 모두 제공합니다.
 - **검색 품질 평가(Eval)**: `evals/run_eval.py`로 Hit@K 및 MRR을 측정할 수 있습니다.
 
@@ -46,6 +46,7 @@ cp .env.example .env
 - `DOCQA_LLM_PROVIDER=offline` (기본값, API 키 없이 바로 실행 가능)
 - `DOCQA_LLM_PROVIDER=gemini` (`GEMINI_API_KEY` 설정 필요)
 - `DOCQA_LLM_PROVIDER=openai` (`OPENAI_API_KEY` 설정 필요)
+- `DOCQA_LLM_PROVIDER=claude` (`ANTHROPIC_API_KEY` 설정 필요)
 
 ### 3. CLI 실행
 

@@ -28,6 +28,8 @@ class Settings:
     gemini_model: str = "gemini-2.5-flash"
     openai_api_key: str = ""
     openai_model: str = "gpt-4o-mini"
+    anthropic_api_key: str = ""
+    anthropic_model: str = "claude-sonnet-4-20250514"
     use_embeddings: bool = False
     docs_dir: Path = Path("./sample_docs")
     index_path: Path = Path("./.docqa_index.json")
@@ -47,6 +49,10 @@ class Settings:
             gemini_model=os.getenv("DOCQA_GEMINI_MODEL", "gemini-2.5-flash").strip(),
             openai_api_key=os.getenv("OPENAI_API_KEY", "").strip(),
             openai_model=os.getenv("DOCQA_OPENAI_MODEL", "gpt-4o-mini").strip(),
+            anthropic_api_key=os.getenv("ANTHROPIC_API_KEY", "").strip(),
+            anthropic_model=os.getenv(
+                "DOCQA_ANTHROPIC_MODEL", "claude-sonnet-4-20250514"
+            ).strip(),
             use_embeddings=os.getenv("DOCQA_USE_EMBEDDINGS", "false").strip().lower()
             in {"1", "true", "yes", "on"},
             docs_dir=Path(os.getenv("DOCQA_DOCS_DIR", "./sample_docs")),
@@ -79,6 +85,8 @@ class Settings:
             gemini_model=base.gemini_model,
             openai_api_key=base.openai_api_key,
             openai_model=base.openai_model,
+            anthropic_api_key=base.anthropic_api_key,
+            anthropic_model=base.anthropic_model,
             use_embeddings=base.use_embeddings,
             docs_dir=docs_dir,
             index_path=index_path,

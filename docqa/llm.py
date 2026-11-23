@@ -144,10 +144,68 @@ class OpenAILLM:
         return body["choices"][0]["message"]["content"].strip()
 
 
+class ClaudeLLM:
+    """Anthropic Messages REST API client."""
+
+    provider_name = "claude"
+
+    def __init__(
+        self,
+        api_key: str,
+        model: str = "claude-sonnet-4-20250514",
+        max_tokens: int = 1024,
+    ) -> None:
+        if not api_key:
+            raise ValueError(
+                "ANTHROPIC_API_KEY is required when DOCQA_LLM_PROVIDER=claude."
+            )
+        self.api_key = api_key
+        self.model = model
+        self.max_tokens = max_tokens
+
+    def generate(self, question: str, hits: list[RetrievalHit]) -> str:
+        if not hits:
+            return "관련 문서를 찾지 못했습니다."
+        prompt = build_grounded_prompt(question, hits)
+        url = "https://api.anthropic.com/v1/messages"
+        payload = json.dumps(
+            {
+                "model": self.model,
+                "max_tokens": self.max_tokens,
+                "temperature": 0.2,
+                "messages": [{"role": "user", "content": prompt}],
+            }
+        ).encode("utf-8")
+        req = urllib.request.Request(
+            url,
+            data=payload,
+            headers={
+                "Content-Type": "application/json",
+                "x-api-key": self.api_key,
+                "anthropic-version": "2023-06-01",
+            },
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            body = json.loads(resp.read().decode("utf-8"))
+        blocks = body.get("content", [])
+        text = "".join(
+            block.get("text", "")
+            for block in blocks
+            if block.get("type") == "text"
+        ).strip()
+        return text or "모델 응답이 비어 있습니다."
+
+
 def create_llm(settings: Settings) -> LLMClient:
     """Instantiate the configured LLM client."""
     if settings.llm_provider == "gemini":
         return GeminiLLM(api_key=settings.gemini_api_key, model=settings.gemini_model)
     if settings.llm_provider == "openai":
         return OpenAILLM(api_key=settings.openai_api_key, model=settings.openai_model)
+    if settings.llm_provider == "claude":
+        return ClaudeLLM(
+            api_key=settings.anthropic_api_key,
+            model=settings.anthropic_model,
+        )
     return OfflineExtractiveLLM()
